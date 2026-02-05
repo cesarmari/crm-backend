@@ -3,6 +3,8 @@ name: Deploy Customer Service
 on:
   push:
     branches: [ "main" ]
+    paths:
+      - "backend/services/customer-service/**"
 
 permissions:
   id-token: write
@@ -24,6 +26,17 @@ jobs:
           role-to-assume: arn:aws:iam::343218212829:role/GitHubActionsDeployLambda
           aws-region: us-east-1
 
-
       - name: Who am I in AWS?
         run: aws sts get-caller-identity
+
+      - name: Build Lambda zip
+        run: |
+          cd backend/services/customer-service
+          npm ci
+          zip -r lambda.zip .
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name customer-service \
+            --zip-file fileb://backend/services/customer-service/lambda.zip
