@@ -21,8 +21,9 @@ jobs:
 
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::TU_ACCOUNT_ID:role/GitHubActionsDeployLambda
+          role-to-assume: arn:aws:iam::343218212829:role/GitHubActionsDeployLambda
           aws-region: us-east-1
+
 
       - name: Who am I in AWS?
         run: aws sts get-caller-identity
